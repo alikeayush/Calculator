@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Text Editor</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: url(hero1.jpg); 
+            background-size: cover;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        #editor-container {
+            position: relative;
+            width: 80%;
+            height: 80%;
+        }
+
+        #editor {
+            width: 70%;
+            height: 100%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            overflow-y: auto;
+            background-image: url(editor.avif); 
+            background-size: cover;
+        }
+
+        #toolbar {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+
+        #toolbar-bottom {
+            position: absolute;
+            bottom: 300px; 
+            left: 900px;
+        }
+
+        button {
+            margin: 5px;
+            cursor: pointer;
+            padding: 10px 15px;
+            font-size: 16px; 
+            border-radius: 5px;
+        }
+        button:hover{
+            background-color: grey;
+        }
+
+        #fontColorPicker {
+            display: none;
+        }
+
+        select {
+            padding: 8px; 
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div id="toolbar">
+        <button onclick="undo()">Undo</button>
+        <button onclick="redo()">Redo</button>
+    </div>
+    <div id="editor-container">
+        <div id="editor" contenteditable>
+           
+        </div>
+        <div id="toolbar-bottom">
+            <select id="fontSelect" onchange="setFont()">
+                <option value="Arial">Arial</option>
+                <option value="Verdana">Verdana</option>
+                <option value="Tahoma">Tahoma</option>
+                <option value="Times New Roman">Times New Roman</option>
+            </select>
+            <select id="sizeSelect" onchange="setSize()">
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
+            </select>
+            <button onclick="setColor()">Font Color</button>
+            <input type="color" id="fontColorPicker">
+            <button onclick="addText()">Add Text</button>
+        </div>
+    </div>
+
+    <script>
+        let editor = document.getElementById('editor');
+        let fontColorPicker = document.getElementById('fontColorPicker');
+
+        function setFont() {
+            let font = document.getElementById('fontSelect').value;
+            document.execCommand('fontName', false, font);
+        }
+
+        function setSize() {
+            let size = document.getElementById('sizeSelect').value;
+            document.execCommand('fontSize', false, size);
+        }
+
+        function setColor() {
+            fontColorPicker.click();
+        }
+
+        fontColorPicker.addEventListener('input', function() {
+            document.execCommand('foreColor', false, this.value);
+        });
+
+        function addText() {
+            let text = prompt("Enter the text to add:");
+            if (text) {
+                document.execCommand('insertHTML', false, `<p>${text}</p>`);
+            }
+        }
+
+        function undo() {
+            document.execCommand('undo', false, null);
+        }
+
+        function redo() {
+            document.execCommand('redo', false, null);
+        }
+    </script>
+</body>
+</html>
